@@ -88,6 +88,13 @@ export function Navbar() {
                       Settings
                     </Link>
                     <Link
+                      href="/settings/billing"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800"
+                    >
+                      Billing
+                    </Link>
+                    <Link
                       href="/dashboard"
                       onClick={() => setMenuOpen(false)}
                       className="block px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800"
