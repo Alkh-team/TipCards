@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { NotificationType } from "@prisma/client";
 
 // POST /api/posts/[id]/like
 export async function POST(
@@ -13,16 +14,37 @@ export async function POST(
 
   const { id: postId } = await params;
 
-  const existing = await prisma.like.findUnique({
-    where: { userId_postId: { userId: session.user.id, postId } },
-    select: { id: true },
-  });
+  const [existing, post] = await Promise.all([
+    prisma.like.findUnique({
+      where: { userId_postId: { userId: session.user.id, postId } },
+      select: { id: true },
+    }),
+    prisma.post.findUnique({
+      where: { id: postId },
+      select: { id: true, userId: true },
+    }),
+  ]);
+
+  if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
 
   if (!existing) {
     await prisma.$transaction([
       prisma.like.create({ data: { userId: session.user.id, postId } }),
       prisma.post.update({ where: { id: postId }, data: { likeCount: { increment: 1 } } }),
     ]);
+    // Non-blocking notification (skip if liking own post)
+    if (post.userId !== session.user.id) {
+      prisma.notification
+        .create({
+          data: {
+            userId: post.userId,
+            actorId: session.user.id,
+            type: NotificationType.LIKE,
+            postId,
+          },
+        })
+        .catch(console.error);
+    }
   }
 
   return NextResponse.json({ liked: true });

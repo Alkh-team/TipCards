@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { NotificationType } from "@prisma/client";
 
 // POST   /api/users/[username]/follow  → follow
 // DELETE /api/users/[username]/follow  → unfollow
@@ -30,19 +31,31 @@ export async function POST(
     return NextResponse.json({ error: "Cannot follow yourself" }, { status: 400 });
   }
 
-  await prisma.follow.upsert({
+  const existing = await prisma.follow.findUnique({
     where: {
       followerId_followingId: {
         followerId: session.user.id,
         followingId: target.id,
       },
     },
-    create: {
-      followerId: session.user.id,
-      followingId: target.id,
-    },
-    update: {},
+    select: { id: true },
   });
+
+  if (!existing) {
+    await prisma.follow.create({
+      data: { followerId: session.user.id, followingId: target.id },
+    });
+    // Non-blocking notification to the followed user
+    prisma.notification
+      .create({
+        data: {
+          userId: target.id,
+          actorId: session.user.id,
+          type: NotificationType.FOLLOW,
+        },
+      })
+      .catch(console.error);
+  }
 
   return NextResponse.json({ following: true });
 }

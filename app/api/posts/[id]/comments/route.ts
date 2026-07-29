@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { NotificationType } from "@prisma/client";
 
 const PAGE_SIZE = 20;
 
@@ -58,7 +59,10 @@ export async function POST(
   }
 
   // Verify post exists
-  const post = await prisma.post.findUnique({ where: { id: postId }, select: { id: true } });
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { id: true, userId: true },
+  });
   if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
 
   const [comment] = await prisma.$transaction([
@@ -76,6 +80,20 @@ export async function POST(
       data:  { commentCount: { increment: 1 } },
     }),
   ]);
+
+  // Non-blocking notification (skip if commenting on own post)
+  if (post.userId !== session.user.id) {
+    prisma.notification
+      .create({
+        data: {
+          userId: post.userId,
+          actorId: session.user.id,
+          type: NotificationType.COMMENT,
+          postId,
+        },
+      })
+      .catch(console.error);
+  }
 
   return NextResponse.json(comment, { status: 201 });
 }
