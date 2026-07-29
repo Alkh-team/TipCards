@@ -96,3 +96,22 @@ export interface PaginatedResponse<T> {
   nextCursor: string | null;
   hasMore: boolean;
 }
+
+// Feed post — extends PostWithAuthor with per-user interaction state
+export interface PostFeedItem extends PostWithAuthor {
+  isLiked: boolean;
+  isSaved: boolean;
+}
+
+// Comment with author info
+export interface CommentWithAuthor {
+  id: string;
+  content: string;
+  createdAt: Date | string;
+  user: {
+    id: string;
+    username: string;
+    name: string | null;
+    avatarUrl: string | null;
+  };
+}

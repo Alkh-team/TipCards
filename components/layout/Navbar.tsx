@@ -21,6 +21,11 @@ export function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-400">
+          {session && (
+            <Link href="/feed" className="hover:text-white transition-colors">
+              Feed
+            </Link>
+          )}
           <Link href="/explore" className="hover:text-white transition-colors">
             Explore
           </Link>
