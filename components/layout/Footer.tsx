@@ -7,7 +7,7 @@ export function Footer() {
         <p>
           &copy; {new Date().getFullYear()}{" "}
           <Link href="/" className="font-semibold text-neutral-300 hover:text-white">
-            TipCards
+            CodeTip
           </Link>
           . All rights reserved.
         </p>

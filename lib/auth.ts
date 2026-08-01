@@ -85,14 +85,27 @@ export const authOptions: NextAuthOptions = {
     // Include user id, username, and plan in the JWT
     async jwt({ token, user, trigger, session }) {
       if (user) {
-        token.id = user.id;
+        token.id       = user.id;
         token.username = (user as { username?: string }).username;
-        token.plan = (user as { plan?: string }).plan;
+        token.plan     = (user as { plan?: string }).plan;
       }
-      // Allow client-side updates (e.g. after plan upgrade)
+      // Allow client-side updates (e.g. after username change)
       if (trigger === "update" && session) {
-        token.plan = session.plan;
-        token.username = session.username;
+        if (session.plan)     token.plan     = session.plan;
+        if (session.username) token.username = session.username;
+      }
+      // Always re-sync plan + username from DB so that:
+      //   • OAuth users (no plan in OAuth profile) get their DB plan
+      //   • Stripe upgrades are reflected without requiring a re-login
+      if (token.id) {
+        const fresh = await prisma.user.findUnique({
+          where:  { id: token.id as string },
+          select: { plan: true, username: true },
+        });
+        if (fresh) {
+          token.plan     = fresh.plan;
+          token.username = fresh.username ?? (token.username as string | undefined);
+        }
       }
       return token;
     },

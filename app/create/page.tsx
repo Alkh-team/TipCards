@@ -59,21 +59,20 @@ function Paywall() {
         <div>
           <h1 className="text-2xl font-bold text-white">Creator plan required</h1>
           <p className="mt-3 text-sm leading-relaxed text-neutral-400">
-            Publishing tip cards requires an active{" "}
-            <span className="font-medium text-indigo-400">Creator</span> or{" "}
-            <span className="font-medium text-indigo-400">Pro</span> subscription.
-            Free accounts can browse, follow, like, and comment.
+            Publishing coding tip cards requires an active{" "}
+            <span className="font-medium text-indigo-400">Creator</span> subscription ($5/month).
+            Free accounts can browse, follow, like, comment, and save cards.
           </p>
         </div>
 
         {/* Feature list */}
         <ul className="space-y-2 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-left text-sm text-neutral-300">
           {[
-            "Create unlimited tip cards",
+            "Create unlimited coding tip cards",
             "Auto-export to 1080×1080 PNG",
             "Custom colours & gradients",
-            "5 layout types (do/don't, code tip, quote…)",
-            "Build a public profile & audience",
+            "5 developer layout types (code, do/don't, before/after…)",
+            "Build a public developer profile & audience",
           ].map((f) => (
             <li key={f} className="flex items-center gap-2">
               <span className="text-indigo-400">✓</span> {f}

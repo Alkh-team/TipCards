@@ -7,7 +7,7 @@ import { UserAvatar } from "@/components/profile/UserAvatar";
 import { PostFeedCard } from "@/components/feed/PostFeedCard";
 import type { PostFeedItem } from "@/types";
 
-export const metadata = { title: "Search · TipCards" };
+export const metadata = { title: "Search · CodeTip" };
 
 const PAGE_SIZE = 12;
 

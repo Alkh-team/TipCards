@@ -21,11 +21,14 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-white text-xl">
-          <span className="rounded-lg bg-indigo-600 px-2 py-0.5 text-white text-sm font-black tracking-tight">
-            TIP
+        <Link href="/" className="flex items-center gap-2 shrink-0">
+          <span className="flex h-7 w-7 items-center justify-center rounded-md border border-neutral-700 bg-neutral-900 font-mono text-[11px] font-bold text-violet-400 select-none">
+            &lt;/&gt;
           </span>
-          <span className="text-white">Cards</span>
+          <span className="text-[1.15rem] font-extrabold tracking-tight leading-none">
+            <span className="text-white">Code</span>
+            <span className="text-violet-400">Tip</span>
+          </span>
         </Link>
 
         {/* Desktop Nav */}

@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import Link from "next/link";
 import { UpgradeButton } from "./UpgradeButton";
 
-export const metadata = { title: "Pricing · TipCards" };
+export const metadata = { title: "Pricing · CodeTip" };
 
 const TIERS = [
   {
@@ -11,49 +11,30 @@ const TIERS = [
     name: "Free",
     price: "$0",
     per: "forever",
-    description: "Browse and save tip cards from the community.",
+    description: "Browse the community, comment on cards, and follow developers.",
     features: [
-      "Browse the explore feed",
-      "Save cards to your collection",
-      "Follow creators",
+      "Browse and search all coding cards",
+      "Like, comment, and save cards",
+      "Follow your favourite developers",
       "Public profile page",
     ],
     highlight: false,
-    soon: false,
   },
   {
     id: "creator",
     name: "Creator",
-    price: "$9",
+    price: "$5",
     per: "per month",
-    description: "Publish unlimited tip cards and grow your audience.",
+    description: "Publish unlimited coding tip cards and grow your developer audience.",
     features: [
       "Everything in Free",
-      "Unlimited tip card creation",
-      "5 layout types",
-      "High-res PNG export",
-      "Card tags & discovery",
-      "Satori-powered card previews",
+      "Unlimited coding tip card creation",
+      "5 developer layout types",
+      "Auto-export 1080×1080 PNG",
+      "Tag cards for discovery",
+      "Build a public developer profile",
     ],
     highlight: true,
-    soon: false,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: "$29",
-    per: "per month",
-    description: "Advanced analytics, white-label exports, and priority support.",
-    features: [
-      "Everything in Creator",
-      "Analytics dashboard",
-      "White-label exports",
-      "Custom branding",
-      "Priority support",
-      "API access",
-    ],
-    highlight: false,
-    soon: true,
   },
 ] as const;
 
@@ -70,27 +51,21 @@ export default async function PricingPage() {
           Simple, transparent pricing
         </h1>
         <p className="mt-3 text-neutral-400">
-          Start for free. Upgrade when you&apos;re ready to create.
+          Free to browse. $5/month to create and share your coding knowledge.
         </p>
       </div>
 
       {/* Tier cards */}
-      <div className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
+      <div className="mx-auto mt-14 grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
         {TIERS.map((tier) => (
           <div
             key={tier.id}
-            className={`relative flex flex-col rounded-2xl border p-8 ${
+            className={`flex flex-col rounded-2xl border p-8 ${
               tier.highlight
                 ? "border-indigo-500 bg-indigo-950/30 shadow-xl shadow-indigo-900/20"
                 : "border-neutral-800 bg-neutral-900"
             }`}
           >
-            {tier.highlight && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-indigo-600 px-3 py-0.5 text-xs font-semibold text-white">
-                Most Popular
-              </span>
-            )}
-
             <div className="mb-6">
               <p className="text-sm font-medium text-neutral-400">{tier.name}</p>
               <p className="mt-2 flex items-baseline gap-1">
@@ -125,14 +100,7 @@ export default async function PricingPage() {
             </ul>
 
             {/* CTA */}
-            {tier.soon ? (
-              <button
-                disabled
-                className="w-full cursor-not-allowed rounded-lg bg-neutral-800 px-4 py-2.5 text-sm font-semibold text-neutral-500"
-              >
-                Coming Soon
-              </button>
-            ) : tier.highlight ? (
+            {tier.highlight ? (
               isPaid ? (
                 <Link
                   href="/settings/billing"
@@ -158,7 +126,7 @@ export default async function PricingPage() {
       <p className="mt-12 text-center text-sm text-neutral-500">
         Payments are securely processed by Stripe.{" "}
         <a
-          href="mailto:hello@tipcards.app"
+          href="mailto:hello@codetip.app"
           className="hover:text-neutral-400 transition-colors"
         >
           Questions?

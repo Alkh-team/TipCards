@@ -6,7 +6,7 @@ import Link from "next/link";
 import { UserAvatar } from "@/components/profile/UserAvatar";
 import type { NotificationType } from "@prisma/client";
 
-export const metadata = { title: "Notifications · TipCards" };
+export const metadata = { title: "Notifications · CodeTip" };
 
 function notificationText(type: NotificationType, actorName: string): string {
   switch (type) {

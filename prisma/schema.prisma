@@ -1,4 +1,4 @@
-// TipCards — Prisma Schema
+// CodeTip — Prisma Schema
 // Run: npx prisma migrate dev --name init
 
 generator client {
@@ -14,7 +14,6 @@ datasource db {
 enum Plan {
   FREE
   CREATOR
-  PRO
 }
 
 enum NotificationType {

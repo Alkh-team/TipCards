@@ -46,8 +46,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // ── Subscription gate ────────────────────────────────────────────────────
-  if (session.user.plan === "FREE") {
+  // ── Subscription gate — always read from DB (JWT plan can be stale) ──────
+  const author = await prisma.user.findUnique({
+    where:  { id: session.user.id },
+    select: { plan: true, username: true },
+  });
+  if (!author) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+  if (author.plan === "FREE") {
     return NextResponse.json(
       { error: "Upgrade to Creator to publish tip cards" },
       { status: 403 }
@@ -98,11 +105,7 @@ export async function POST(req: NextRequest) {
   // ── Export card image → R2 (fail-safe: errors do not abort the request) ──
   let imageUrl: string | null = null;
   try {
-    const user = await prisma.user.findUnique({
-      where:  { id: session.user.id },
-      select: { username: true },
-    });
-    const handle = user?.username ?? "tipcards";
+    const handle = author.username ?? "tipcards";
 
     const buffer = await exportCardToBuffer(
       { ...content, branding: { handle } } as Parameters<typeof exportCardToBuffer>[0],
@@ -120,6 +123,9 @@ export async function POST(req: NextRequest) {
     }
   } catch (err) {
     console.error("[api/posts] Image export/upload failed (post still created):", err);
+    if (err instanceof Error) {
+      console.error("[api/posts] Error details:", err.message, err.stack);
+    }
   }
 
   return NextResponse.json({ id: post.id, imageUrl }, { status: 201 });

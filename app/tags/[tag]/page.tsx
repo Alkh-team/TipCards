@@ -10,7 +10,7 @@ export async function generateMetadata({
   params: Promise<{ tag: string }>;
 }) {
   const { tag } = await params;
-  return { title: `#${tag} · TipCards` };
+  return { title: `#${tag} · CodeTip` };
 }
 
 const PAGE_SIZE = 12;

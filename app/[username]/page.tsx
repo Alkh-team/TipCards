@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props) {
   if (!user) return { title: "Not Found" };
   return {
     title: user.name ?? `@${username}`,
-    description: user.bio ?? `${username}'s tip cards on TipCards`,
+    description: user.bio ?? `${username}'s coding tips on CodeTip`,
   };
 }
 

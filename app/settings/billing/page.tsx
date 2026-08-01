@@ -9,24 +9,18 @@ export const metadata = { title: "Billing · Settings" };
 
 const PLAN_FEATURES: Record<string, string[]> = {
   FREE: [
-    "Browse the explore feed",
-    "Save cards to your collection",
-    "Follow creators",
+    "Browse all coding tip cards",
+    "Like, comment, and save cards",
+    "Follow developers",
     "Public profile page",
   ],
   CREATOR: [
-    "Unlimited tip card creation",
-    "5 layout types",
-    "High-res PNG export",
-    "Card tags & discovery",
-    "Browse & follow creators",
-  ],
-  PRO: [
-    "Everything in Creator",
-    "Analytics dashboard",
-    "White-label exports",
-    "Custom branding",
-    "Priority support",
+    "Everything in Free",
+    "Unlimited coding tip card creation",
+    "5 developer layout types",
+    "Auto-export 1080×1080 PNG",
+    "Tag cards for discovery",
+    "Build a developer audience",
   ],
 };
 
@@ -128,10 +122,10 @@ export default async function BillingPage({
       <p className="text-xs text-neutral-600">
         Payments are securely processed by Stripe. For billing support, email{" "}
         <a
-          href="mailto:hello@tipcards.app"
+          href="mailto:hello@codetip.app"
           className="text-neutral-400 transition-colors hover:text-white"
         >
-          hello@tipcards.app
+          hello@codetip.app
         </a>
       </p>
     </div>
